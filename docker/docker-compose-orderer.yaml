@@ -1,0 +1,38 @@
+version: "3"
+
+volumes:
+  orderer0.modbus2chain.com:
+
+networks:
+  apnet:
+
+services:
+  orderer0.modbus2chain.com:
+    container_name: orderer0.modbus2chain.com
+    image: hyperledger/fabric-orderer:2.1
+    volumes:
+      - ../system-genesis-block/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ../crypto-material/ordererOrganizations/modbus2chain.com/orderers/orderer0.modbus2chain.com/msp:/var/hyperledger/orderer/msp
+      - ../crypto-material/ordererOrganizations/modbus2chain.com/orderers/orderer0.modbus2chain.com/tls/:/var/hyperledger/orderer/tls
+      - orderer0.modbus2chain.com:/var/hyperledger/production/orderer
+    environment:
+      # Orderer Specific settings
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=7050
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # Orderer TLS settings
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    ports:
+      - 7050:7050
+    networks:
+      - apnet

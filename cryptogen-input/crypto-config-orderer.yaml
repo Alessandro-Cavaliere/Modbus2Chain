@@ -1,0 +1,7 @@
+OrdererOrgs:
+  - Name: Orderer
+    Domain: modbus2chain.com
+    Template:
+      Count: 1
+      SANS:
+        - localhost

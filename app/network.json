@@ -1,0 +1,171 @@
+{
+    "name": "Modbus2Chain",
+    "description": "Modbus2Chain Project course for IoT security and Data security",
+    "version": "0.1",
+    "client": {
+        "organization": "Org1",
+        "credentialStore": {
+          "path": "/tmp/hfc-kvs",
+          "cryptoStore": {
+            "path": "/tmp/hfc-cvs"
+          },
+          "wallet": "wallet-name"
+        }
+    },
+    "organizations": {
+    "orderer0.modbus2chain.com":{
+        "mspid":"OrdererMSP",
+        "orderers": [
+            "orderer.modbus2chain.com"
+          ],
+          "certificateAuthorities": [
+            "ca-orderer"
+          ],
+          "users": {
+            "Admin": {
+              "cert": "../crypto-material/ordererOrganizations/modbus2chain.com/users/Admin@modbus2chain.com/msp/signcerts/Admin@modbus2chain.com-cert.pem",
+              "private_key": "../crypto-material/ordererOrganizations/modbus2chain.com/users/Admin@modbus2chain.com/msp/keystore/priv_sk"
+            }
+          }
+        },
+          "org1.modbus2chain.com": {
+            "mspid": "Org1MSP",
+            "peers": [
+              "peer0.org1.modbus2chain.com"
+            ],
+            "certificateAuthorities": [
+              "ca-org1"
+            ],
+            "users": {
+              "Admin": {
+                "cert": "../crypto-material/peerOrganizations/org1.modbus2chain.com/users/Admin@org1.modbus2chain.com/msp/signcerts/Admin@org1.modbus2chain.com-cert.pem",
+                "private_key": "../crypto-material/peerOrganizations/org1.modbus2chain.com/users/Admin@org1.modbus2chain.com/msp/keystore/priv_sk"
+              }
+            }
+          },
+          "org2.modbus2chain.com": {
+            "mspid": "Org2MSP",
+            "peers": [
+              "peer0.org2.modbus2chain.com"
+            ],
+            "certificateAuthorities": [
+              "ca-org2"
+            ],
+            "users": {
+              "Admin": {
+                "cert": "../crypto-material/peerOrganizations/org2.modbus2chain.com/users/Admin@org2.modbus2chain.com/msp/signcerts/Admin@org2.modbus2chain.com-cert.pem",
+                "private_key": "../crypto-material/peerOrganizations/org2.modbus2chain.com/users/Admin@org2.modbus2chain.com/msp/keystore/priv_sk"
+              }
+            }
+          },
+          "org3.modbus2chain.com": {
+            "mspid": "Org3MSP",
+            "peers": [
+              "peer0.org3.modbus2chain.com"
+            ],
+            "certificateAuthorities": [
+              "ca-org3"
+            ],
+            "users": {
+              "Admin": {
+                "cert": "../crypto-material/peerOrganizations/org3.modbus2chain.com/users/Admin@org3.modbus2chain.com/msp/signcerts/Admin@org3.modbus2chain.com-cert.pem",
+                "private_key": "../crypto-material/peerOrganizations/org3.modbus2chain.com/users/Admin@org3.modbus2chain.com/msp/keystore/priv_sk"
+              }
+            }
+          }
+        },
+    "orderers": {
+        "orderer0.modbus2chain.com": {
+          "url": "localhost:7050",
+          "grpcOptions": {
+            "grpc.ssl_target_name_override": "orderer.modbus2chain.com",
+            "grpc-max-send-message-length": 15
+          },
+          "tlsCACerts": {
+            "path": "../crypto-material/ordererOrganizations/modbus2chain.com/tlsca/tlsca.modbus2chain.com-cert.pem"
+          }
+        }
+      },
+      "peers": {
+        "peer0.org1.modbus2chain.com": {
+          "url": "localhost:7051",
+          "eventUrl": "localhost:7051",
+          "grpcOptions": {
+            "grpc.ssl_target_name_override": "peer0.org1.modbus2chain.com",
+            "grpc.http2.keepalive_time": 15
+          },
+          "tlsCACerts": {
+            "path": "../crypto-material/peerOrganizations/org1.modbus2chain.com/peers/peer0.org1.modbus2chain.com/msp/tlscacerts/tlsca.org1.modbus2chain.com-cert.pem"
+          }
+        },
+        "peer0.org2.modbus2chain.com": {
+            "url": "localhost:8051",
+            "eventUrl": "localhost:8051",
+            "grpcOptions": {
+              "grpc.ssl_target_name_override": "peer0.org2.modbus2chain.com",
+              "grpc.http2.keepalive_time": 15
+            },
+            "tlsCACerts": {
+              "path": "../crypto-material/peerOrganizations/org2.modbus2chain.com/peers/peer0.org2.modbus2chain.com/msp/tlscacerts/tlsca.org2.modbus2chain.com-cert.pem"
+            }
+          },
+          "peer0.org3.modbus2chain.com": {
+            "url": "localhost:8052",
+            "eventUrl": "localhost:8052",
+            "grpcOptions": {
+              "grpc.ssl_target_name_override": "peer0.org3.modbus2chain.com",
+              "grpc.http2.keepalive_time": 15
+            },
+            "tlsCACerts": {
+              "path": "../crypto-material/peerOrganizations/org3.modbus2chain.com/peers/peer0.org3.modbus2chain.com/msp/tlscacerts/tlsca.org3.modbus2chain.com-cert.pem"
+            }
+          }
+        },
+        "certificateAuthorities": {
+          "ca-org1": {
+            "url": "https://localhost:7051",
+            "grpcOptions": {
+              "verify": true
+            },
+            "tlsCACerts": {
+              "path": "../crypto-material/peerOrganizations/org1.modbus2chain.com/ca/org1.modbus2chain.com-cert.pem"
+            },
+            "registrar": [
+              {
+                "enrollId": "admin",
+                "enrollSecret": "adminpw"
+              }
+            ]
+          },
+          "ca-org2": {
+            "url": "https://localhost:8051",
+            "grpcOptions": {
+              "verify": true
+            },
+            "tlsCACerts": {
+              "path": "../crypto-material/peerOrganizations/org2.modbus2chain.com/ca/org2.modbus2chain.com-cert.pem"
+            },
+            "registrar": [
+              {
+                "enrollId": "admin",
+                "enrollSecret": "adminpw"
+              }
+            ]
+          },
+          "ca-org3": {
+            "url": "https://localhost:8052",
+            "grpcOptions": {
+              "verify": true
+            },
+            "tlsCACerts": {
+              "path": "../crypto-material/peerOrganizations/org3.modbus2chain.com/ca/org3.modbus2chain.com-cert.pem"
+            },
+            "registrar": [
+              {
+                "enrollId": "admin",
+                "enrollSecret": "adminpw"
+              }
+            ]
+          }
+        }
+}

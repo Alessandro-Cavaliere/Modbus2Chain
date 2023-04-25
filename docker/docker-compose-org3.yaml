@@ -1,0 +1,35 @@
+version: '3'
+
+volumes:
+  peer0.org3.modbus2chain.com:
+networks:
+  apnet:
+
+services:
+  peer0.org3.modbus2chain.com:
+    networks:
+      - apnet   
+    container_name: peer0.org3.modbus2chain.com
+    image: hyperledger/fabric-peer:2.1
+    environment:
+      # Generic peer variables
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Specific peer variables
+      - CORE_PEER_ID=peer0.org3.modbus2chain.com
+      - CORE_PEER_ADDRESS=peer0.org3.modbus2chain.com:8052
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:8052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org3.modbus2chain.com:8052
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org3.modbus2chain.com:8052
+      - CORE_PEER_LOCALMSPID=Org2MSP
+    volumes:
+        - ../crypto-material/peerOrganizations/org3.modbus2chain.com/peers/peer0.org3.modbus2chain.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-material/peerOrganizations/org3.modbus2chain.com/peers/peer0.org3.modbus2chain.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.org3.modbus2chain.com:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 8052:8052
+      

@@ -1,0 +1,188 @@
+Organizations:
+
+    - &OrdererOrg
+        Name: OrdererOrg 
+        ID: OrdererMSP  # Consente agli altri partecipanti alla rete l'identificazione di questa entità.
+        MSPDir: ../crypto-material/ordererOrganizations/modbus2chain.com/msp  
+        Policies:    # Configurazione del tipo di ruoli a cui si è autorizzati a fare
+            Readers:
+                Type: Signature
+                Rule: "OR('OrdererMSP.member')"
+            Writers:
+                Type: Signature
+                Rule: "OR('OrdererMSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('OrdererMSP.admin')"  
+        OrdererEndpoints:
+            - modbus2chain.com:7050
+
+    - &Org1
+        Name: Org1
+        ID: Org1MSP   # Consente agli altri partecipanti alla rete l'identificazione di questa entità.
+        MSPDir: ../crypto-material/peerOrganizations/org1.modbus2chain.com/msp
+        Policies:  # Configurazione del tipo di ruoli a cui si è autorizzati a fare
+            Readers:
+                Type: Signature
+                Rule: "OR('Org1MSP.member')"
+            Writers:
+                Type: Signature
+                Rule: "OR('Org1MSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('Org1MSP.admin')"
+            Endorsement:
+                Type: Signature
+                Rule: "OR('Org1MSP.member')"
+        AnchorPeers:  # Gateway peer da un'organizzazione all'Anchor Peer di un'altra organizzazione
+            - Host: peer0.org1.modbus2chain.com
+              Port: 7051
+
+    - &Org2
+        Name: Org2
+        ID: Org2MSP   # Consente agli altri partecipanti alla rete l'identificazione di questa entità.
+        MSPDir: ../crypto-material/peerOrganizations/org2.modbus2chain.com/msp
+        Policies:  # Configurazione del tipo di ruoli a cui si è autorizzati a fare
+            Readers:
+                Type: Signature
+                Rule: "OR('Org2MSP.member')"
+            Writers:
+                Type: Signature
+                Rule: "OR('Org2MSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('Org2MSP.admin')"
+            Endorsement:
+                Type: Signature
+                Rule: "OR('Org2MSP.member')"
+        AnchorPeers:  # Gateway peer da un'organizzazione all'Anchor Peer di un'altra organizzazione
+            - Host: peer0.org2.modbus2chain.com
+              Port: 8051
+
+    - &Org3
+        Name: Org3
+        ID: Org3MSP   # Consente agli altri partecipanti alla rete l'identificazione di questa entità.
+        MSPDir: ../crypto-material/peerOrganizations/org3.modbus2chain.com/msp
+        Policies:  # Configurazione del tipo di ruoli a cui si è autorizzati a fare
+            Readers:
+                Type: Signature
+                Rule: "OR('Org3MSP.member')"
+            Writers:
+                Type: Signature
+                Rule: "OR('Org3MSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('Org3MSP.admin')"
+            Endorsement:
+                Type: Signature
+                Rule: "OR('Org3MSP.member')"
+        AnchorPeers:  # Gateway peer da un'organizzazione all'Anchor Peer di un'altra organizzazione
+            - Host: peer0.org2.modbus2chain.com
+              Port: 8052
+
+# Nelle Capabilities *Channel* definisce il set di funzionalità di Hyperledger che viene utilizzato solo dai peer, 
+# mentre *Orderer* definisce il set di funzionalità che è rilevante (lo indovini) solo per gli ordini. 
+# L'*applicazione* , d'altra parte, definisce il set di funzionalità, che è rilevante per tutti i peer E tutti gli ordinatori e quindi definisce il minimo comune denominatore per l'intera rete.
+Capabilities:
+    Channel: &ChannelCapabilities
+        V2_0: true
+    Orderer: &OrdererCapabilities
+        V2_0: true
+    Application: &ApplicationCapabilities
+        V2_0: true
+
+Application: &ApplicationDefaults
+    Organizations:
+    Policies:  
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+        LifecycleEndorsement:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Endorsement"
+        Endorsement:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Endorsement"
+    Capabilities:
+        <<: *ApplicationCapabilities
+
+Orderer: &OrdererDefaults
+    OrdererType: etcdraft
+    etcdRaft:
+        Options:
+              TickInterval: 500ms
+              ElectionTick: 10
+              HeartbeatTick: 1
+              MaxInflightBlocks: 5
+              SnapshotIntervalSize: 20971520
+        Consenters:
+        - Host: orderer0.modbus2chain.com
+          Port: 7050
+          ClientTLSCert: ../crypto-material/ordererOrganizations/modbus2chain.com/orderers/orderer0.modbus2chain.com/tls/server.crt
+          ServerTLSCert: ../crypto-material/ordererOrganizations/modbus2chain.com/orderers/orderer0.modbus2chain.com/tls/server.crt
+    BatchTimeout: 2s      # Definiscono alcune specifiche riguardanti il ​​tempo dopo il quale un blocco dovrebbe essere  
+    BatchSize:            # costruito e quante transazioni dovrebbe contenere al massimo
+        MaxMessageCount: 10
+        AbsoluteMaxBytes: 99 MB
+        PreferredMaxBytes: 512 KB
+    Organizations:
+    Policies:  # Configurazione del tipo di ruoli a cui si è autorizzati a fare (in questo caso per l'intera rete)
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+        BlockValidation:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+
+Channel: &ChannelDefaults   #Si definisce qui quali criteri di canale predefiniti sono impostati per il canale
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+    Capabilities:
+        <<: *ChannelCapabilities
+
+Profiles:
+    modbus2chainNetworkProfile:
+        <<: *ChannelDefaults
+        Orderer:
+            <<: *OrdererDefaults   #definiscono chi sarà in grado di modificare ( Admins ) la nostra rete o semplicemente leggere / scrivere ( Readers / Writers ) sulla nostra rete.
+            Organizations:      # Qui definiamo da quali organizzazioni provengono i nostri ordinatori
+                - *OrdererOrg   
+            Capabilities:
+                <<: *OrdererCapabilities
+        Consortiums:
+            modbus2chainConsortium:
+                Organizations:   # Quali organizzazioni sono autorizzate a unirsi alla rete e creare canali ecc..?
+                    - *Org1
+                    - *Org2
+                    - *Org3
+    modbus2chainChannelProfile:
+        Consortium: modbus2chainConsortium
+        <<: *ChannelDefaults
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Org1
+                - *Org2
+                - *Org3
+            Capabilities:
+                <<: *ApplicationCapabilities

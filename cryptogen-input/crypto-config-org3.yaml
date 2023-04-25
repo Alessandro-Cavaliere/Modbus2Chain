@@ -1,0 +1,7 @@
+PeerOrgs:
+  - Name: Org3
+    Domain: org3.modbus2chain.com
+    Template:
+      Count: 1
+      SANS:
+        - localhost
