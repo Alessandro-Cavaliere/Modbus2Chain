@@ -8,6 +8,7 @@ beaglebone_port = 22 # Porta SSH del nostro BeagleBone Black
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 
+# configurazione
 # Configura il client Modbus RTU
 client = ModbusClient(method='rtu', port='/dev/ttyS1', baudrate=9600, timeout=1, stopbits=1, bytesize=8, parity='N')
 
