@@ -8,7 +8,7 @@ The IoT device communication framework is written in Python and is part of the b
 
 In summary, the project provides a robust and secure infrastructure for managing environmental data taken from IoT devices using the Modbus RTU protocol, based on Hyperledger Fabric and middleware in Python.
 
-## Pre-requisite
+## 📚 Pre-requisite
 The following is the list of requirements for the application to function properly
 
  -  *Unix/Linux system or shell bash (using WSL, Git Bash etc...)*
@@ -18,7 +18,7 @@ The following is the list of requirements for the application to function proper
  -  *Binaries of Hyperledger Fabric (provided in the repository)*
 
 
-## Installation
+## 🛠️ Installation
 
 Install all dependencies with ***pip***:
 
@@ -33,9 +33,9 @@ To create a private blockchain network using Hyperledger Fabric, use this script
 Specifically, this command performs these operations:
 - Definition of environment variables for Hyperledger Fabric binaries and blockchain network configuration;
  - Generation of cryptographic material for the organizations involved;
- - Creating blockchain network genesis block using the "***modbus2chainNetworkProfile***" configuration profile by saving it in the "***system-genesis-block***" directory;
- - Starting Docker Containers using ***docker-compose.yaml***;
- - Creating the transaction for creating the communication channel "***modbus2chainchannel***" using the configuration profile "***modbus2chainChannelProfile***" saving it in the directory "***channel-artifacts***";
+ - Creating blockchain network genesis block using the `modbus2chainNetworkProfile` configuration profile by saving it in the system-genesis-block directory;
+ - Starting Docker Containers using `docker-compose.yaml`;
+ - Creating the transaction for creating the communication channel `modbus2chainchannel` using the configuration profile `modbus2chainChannelProfile` saving it in the directory `channel-artifacts`;
  - Creation of anchor peer updates for organizations;
  - Adding the involved organizations to the communication channel;
  - Update anchors peer for the involved organizations.
@@ -45,8 +45,9 @@ To eventually delete all files and configurations associated with the Hyperledge
     bash stop.sh          
 ```
 
-## Usage
-To launch and run this application assumes proper configuration and setting of the IoT device architecture and middleware. 
+## 🚀 Usage
+>To launch and run this application assumes proper configuration and setting of the IoT device architecture and middleware. 
+
 To launch the application:
 ```python
     cd app
