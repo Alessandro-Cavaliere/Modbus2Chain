@@ -12,16 +12,16 @@ load_dotenv(find_dotenv())
 bbb_ip = os.getenv('BBB_IP')
 bbb_username = os.getenv('BBB_SSH_USERNAME')
 bbb_password = os.getenv('BBB_SSH_PASSWORD')
-
+print(bbb_ip,bbb_password,bbb_username)
 # Configura il client Modbus RTU 
-client = ModbusClient(method='rtu', port='/dev/ttyS1', baudrate=9600, timeout=1, stopbits=1, bytesize=8, parity='N')
+client = ModbusSerialClient(method='rtu', port='/dev/ttyS1', baudrate=9600, timeout=1, stopbits=1, bytesize=8, parity='N')
 
 
 try:
     # Crea una connessione SSH
     bbb = paramiko.SSHClient()
     bbb.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    bbb.connect(beaglebone_ip, username=bbb_username, password=bbb_password)
+    bbb.connect(bbb_ip, username=bbb_username, password=bbb_password)
 
     # Esegui il comando per impostare la direzione della porta GPIO 45 come output
     stdin, stdout, stderr = bbb.exec_command('echo out > /sys/class/gpio/gpio45/direction')
