@@ -5,7 +5,6 @@ sys.path.insert(0, 'app\routes\auth.py')
 import auth
 import os
 import datetime
-import mysql.connector
 from dotenv import load_dotenv
 import jwt
 import utils
@@ -14,13 +13,6 @@ load_dotenv()
 app = Flask("Modbus2Chain")
 
 
-connection = mysql.connector.connect(
-    host=os.getenv('HOST'),
-    user=os.getenv('USER'),
-    password=os.getenv('PASSWORD'),
-    database=os.getenv('DATABASE'),
-    connect_timeout=60
-)
 
 # Chiave segreta per la firma del token JWT (dovrebbe essere segreta)
 jwt_secret_key = os.getenv('SECRET_APP')
@@ -102,4 +94,4 @@ def protected_route():
 
     return jsonify({"message": "Questa è una rotta protetta"}), 200
 
-app.run(host='192.168.10.174',port=8000)  #ip del pc locale
+app.run(host='0.0.0.0',port=8000)  #ip del pc locale
