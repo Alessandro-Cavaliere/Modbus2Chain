@@ -14,7 +14,7 @@ cryptogen generate --config=./cryptogen-input/crypto-config-orderer.yaml --outpu
 printSeparator "Create Genesis-Block"
 configtxgen -profile modbus2chainNetworkProfile -configPath ${PWD}/config -channelID system-channel -outputBlock ./system-genesis-block/genesis.block
 printSeparator "Start modbus2chainNetworkProfile within Docker Containers"
-docker-compose -f ./docker/docker-compose-orderer.yaml -f ./docker/docker-compose-org1.yaml -f ./docker/docker-compose-org2.yaml -f ./docker/docker-compose-org3.yaml up -d
+docker-compose -f ./docker/docker-compose-orderer.yaml -f ./docker/docker-compose-org1.yaml -f ./docker/docker-compose-org2.yaml -f ./docker/docker-compose-org3.yaml -f ./docker/docker-compose-ca-org1.yaml up -d
 printSeparator "Create Channel Transaction"
 configtxgen -profile modbus2chainChannelProfile -configPath ${PWD}/config -outputCreateChannelTx ./channel-artifacts/modbus2chainchannel.tx -channelID modbus2chainchannel && sleep 3
 printSeparator "Create Anchor Peers Update for Org 1"
@@ -32,6 +32,18 @@ printSeparator "Join Org1 to channel"
 peer channel join -b ./channel-artifacts/modbus2chainchannel.block && sleep 1
 printSeparator "Update Anchor Peers as Org1"
 peer channel update -o localhost:7050 --ordererTLSHostnameOverride orderer0.modbus2chain.com -c modbus2chainchannel -f ./channel-artifacts/ORG1MSPanchors.tx --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA
+printSeparator "Deploy the smart-contract atcc.go"
+peer lifecycle chaincode package atcc.tar.gz --path ./atcc/src/ --lang golang --label atcc_1.0
+peer lifecycle chaincode install atcc.tar.gz
+peer lifecycle chaincode queryinstalled
+peer lifecycle chaincode checkcommitreadiness --channelID modbus2chainchannel --name atcc_1.0 --version 1.0 --sequence 1
+peer lifecycle chaincode commit --channelID modbus2chainchannel --name atcc_1.0 --version 1.0 --sequence 1 --peerAddresses peer0.org1.modbus2chain.com  --tlsRootCertFiles $CORE_PEER_TLS_ENABLED
+# Invocazione
+peer chaincode invoke --channelID modbus2chainchannel --name atcc_1.0 --peerAddresses peer0.org1.modbus2chain.com  --tlsRootCertFiles $CORE_PEER_TLS_ENABLED --isInit -c '{"Args":["InitLedger"]}'
+
+# Interrogazione
+peer chaincode query --channelID modbus2chainchannel --name atcc_1.0 -c '{"Args":["ReadAsset","tempetature"]}'
+
 printSeparator "Set Identity to Org2"
 switchIdentity "Org2" 8051 && echoCurrentFabricEnvironment && sleep 1
 printSeparator "Join Org2 to channel"
