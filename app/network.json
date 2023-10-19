@@ -34,7 +34,7 @@
               "peer0.org1.modbus2chain.com"
             ],
             "certificateAuthorities": [
-              "ca-org1"
+              "ca-org1.modbus2chain.com"
             ],
             "users": {
               "Admin": {
@@ -122,17 +122,17 @@
           }
         },
         "certificateAuthorities": {
-          "ca-org1": {
-            "url": "https://localhost:7051",
+          "ca-org1.modbus2chain.com": {
+            "url": "https://0.0.0.0:7054",
             "grpcOptions": {
-              "verify": true
+              "verify": false
             },
             "tlsCACerts": {
-              "path": "../crypto-material/peerOrganizations/org1.modbus2chain.com/ca/org1.modbus2chain.com-cert.pem"
+              "path": "/home/alexcav/go/src/GitHub/Modbus2Chain/crypto-material/ordererOrganizations/modbus2chain.com/ca/ca.modbus2chain.com-cert.pem"
             },
             "registrar": [
               {
-                "enrollId": "admin",
+                "enrollId": "Admin",
                 "enrollSecret": "adminpw"
               }
             ]
