@@ -1,6 +1,6 @@
 #!/bin/bash
 
-COMPOSE_FILES="-f ./docker/docker-compose-org1.yaml -f ./docker/docker-compose-org2.yaml -f ./docker/docker-compose-orderer.yaml"
+COMPOSE_FILES="-f ./docker/docker-compose-org1.yaml -f ./docker/docker-compose-org2.yaml -f ./docker/docker-compose-orderer.yaml -f ./docker/docker-compose-ca-org1.yaml"
 IMAGE_TAG=$IMAGETAG docker-compose ${COMPOSE_FILES} down --volumes --remove-orphans
 
 rm -rf ./crypto-material/*
