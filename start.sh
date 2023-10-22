@@ -32,17 +32,30 @@ printSeparator "Join Org1 to channel"
 peer channel join -b ./channel-artifacts/modbus2chainchannel.block && sleep 1
 printSeparator "Update Anchor Peers as Org1"
 peer channel update -o localhost:7050 --ordererTLSHostnameOverride orderer0.modbus2chain.com -c modbus2chainchannel -f ./channel-artifacts/ORG1MSPanchors.tx --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA
-printSeparator "Deploy the smart-contract atcc.go"
-peer lifecycle chaincode package atcc.tar.gz --path ./atcc/src/ --lang golang --label atcc_1.0
-peer lifecycle chaincode install atcc.tar.gz
-peer lifecycle chaincode queryinstalled
-peer lifecycle chaincode checkcommitreadiness --channelID modbus2chainchannel --name atcc_1.0 --version 1.0 --sequence 1
-peer lifecycle chaincode commit --channelID modbus2chainchannel --name atcc_1.0 --version 1.0 --sequence 1 --peerAddresses peer0.org1.modbus2chain.com  --tlsRootCertFiles $CORE_PEER_TLS_ENABLED
-# Invocazione
-peer chaincode invoke --channelID modbus2chainchannel --name atcc_1.0 --peerAddresses peer0.org1.modbus2chain.com  --tlsRootCertFiles $CORE_PEER_TLS_ENABLED --isInit -c '{"Args":["InitLedger"]}'
 
-# Interrogazione
-peer chaincode query --channelID modbus2chainchannel --name atcc_1.0 -c '{"Args":["ReadAsset","tempetature"]}'
+# Pacchetta il chaincode
+printSeparator "Package Chaincode"
+
+peer lifecycle chaincode package cciotdata.tar.gz --path ./atcc/ --lang node --label cciotdata 
+
+# Installa il chaincode e ottieni il package-id
+printSeparator "Install Chaincode for Org1"
+peer lifecycle chaincode install cciotdata.tar.gz  --tlsRootCertFiles ./crypto-material/peerOrganizations/org1.modbus2chain.com/tlsca/tlsca.org1.modbus2chain.com-cert.pem
+
+# Ottieni l'elenco dei package installati
+INSTALLED_PACKAGES=$(peer lifecycle chaincode queryinstalled)
+echo "INSTALLED_PACKAGES ID: $INSTALLED_PACKAGES"
+# Estrai il package-id dal risultato
+PACKAGE_ID=$(echo "$INSTALLED_PACKAGES" | awk '/Package ID:/{print $3}')
+
+# Stampa il risultato dell'installazione
+echo "Package ID: $PACKAGE_ID"
+
+echo "ORDERE CA ID: $ORDERER_CA"
+
+# Approva il chaincode per l'organizzazione 1
+printSeparator "Approve Chaincode for Org1"
+peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer0.modbus2chain.com --channelID modbus2chainchannel --name cciotdata --version 1.1 --init-required --sequence 1 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA --package-id $PACKAGE_ID localhost:7051 --waitForEvent --signature-policy "OR ('Org1MSP.peer','Org2MSP.peer','Org3MSP.peer')"
 
 printSeparator "Set Identity to Org2"
 switchIdentity "Org2" 8051 && echoCurrentFabricEnvironment && sleep 1
@@ -50,10 +63,58 @@ printSeparator "Join Org2 to channel"
 peer channel join -b ./channel-artifacts/modbus2chainchannel.block  && sleep 1
 printSeparator "Update Anchor Peers as Org2"
 peer channel update -o localhost:7050 --ordererTLSHostnameOverride orderer0.modbus2chain.com -c modbus2chainchannel -f ./channel-artifacts/ORG2MSPanchors.tx --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA
+
+peer lifecycle chaincode package cciotdata.tar.gz --path ./atcc/ --lang node --label cciotdata 
+
+# Installa il chaincode e ottieni il package-id
+printSeparator "Install Chaincode for Org2"
+peer lifecycle chaincode install cciotdata.tar.gz --tlsRootCertFiles /usr/local/go/src/Modbus2Chain/crypto-material/peerOrganizations/org2.modbus2chain.com/peers/peer0.org2.modbus2chain.com/tls/ca.crt
+
+# Ottieni l'elenco dei package installati
+INSTALLED_PACKAGES=$(peer lifecycle chaincode queryinstalled)
+echo "INSTALLED_PACKAGES ID: $INSTALLED_PACKAGES"
+# Estrai il package-id dal risultato
+PACKAGE_ID=$(echo "$INSTALLED_PACKAGES" | awk '/Package ID:/{print $3}')
+
+# Stampa il risultato dell'installazione
+echo "Package ID: $PACKAGE_ID"
+
+echo "ORDERE CA ID: $ORDERER_CA"
+# Approva il chaincode per l'organizzazione 2 
+printSeparator "Approve Chaincode for Org2"
+peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer0.modbus2chain.com --channelID modbus2chainchannel --name cciotdata --version 1.1 --init-required --sequence 1 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA --package-id $PACKAGE_ID --waitForEvent --signature-policy "OR ('Org1MSP.peer','Org2MSP.peer','Org3MSP.peer')"
+
+# Verifica la disponibilità del commit
+printSeparator "Check Commit Readiness"
+peer lifecycle chaincode checkcommitreadiness --channelID modbus2chainchannel --name cciotdata --version 1.1 --sequence 1 --init-required --tls $CORE_PEER_TLS_ENABLED --signature-policy "OR ('Org1MSP.peer','Org2MSP.peer','Org3MSP.peer')"
+
+# Esegui il commit del chaincode
+printSeparator "Commit Chaincode"
+peer lifecycle chaincode commit -o localhost:7050 --ordererTLSHostnameOverride orderer0.modbus2chain.com --channelID modbus2chainchannel --name cciotdata --version 1.1 --sequence 1 --init-required --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA --peerAddresses localhost:7051 --peerAddresses localhost:8051 --tlsRootCertFiles /usr/local/go/src/Modbus2Chain/crypto-material/peerOrganizations/org1.modbus2chain.com/peers/peer0.org1.modbus2chain.com/tls/ca.crt --tlsRootCertFiles /usr/local/go/src/Modbus2Chain/crypto-material/peerOrganizations/org2.modbus2chain.com/peers/peer0.org2.modbus2chain.com/tls/ca.crt --signature-policy "OR ('Org1MSP.peer','Org2MSP.peer','Org3MSP.peer')"
+
+# Inizializza il chaincode
+printSeparator "Initialize Chaincode"
+peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer0.modbus2chain.com --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA --channelID modbus2chainchannel -n cciotdata --isInit -c '{"Args":["initLedger"]}'
+
+
+printSeparator "VERIFY THE CHANNEL CREATION"
+peer channel getinfo -c modbus2chainchannel
+printSeparator "LOGS"
+printSeparator "LOGS"
+printSeparator "LOGS"
+peer lifecycle chaincode queryinstalled --peerAddresses localhost:7051 --tlsRootCertFiles /usr/local/go/src/Modbus2Chain/crypto-material/peerOrganizations/org1.modbus2chain.com/peers/peer0.org1.modbus2chain.com/tls/ca.crt --output json 
+peer lifecycle chaincode querycommitted --channelID modbus2chainchannel --name cciotdata
+
+
 printSeparator "Set Identity to Org3"
 switchIdentity "Org3" 8052 && echoCurrentFabricEnvironment && sleep 1
 printSeparator "Join Org3 to channel"
-peer channel join -b ./channel-artifacts/modbus2chainchannel.block
+peer channel join -b ./channel-artifacts/modbus2chainchannel.block  && sleep 1
 printSeparator "Update Anchor Peers as Org3"
 peer channel update -o localhost:7050 --ordererTLSHostnameOverride orderer0.modbus2chain.com -c modbus2chainchannel -f ./channel-artifacts/ORG3MSPanchors.tx --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA
+
+# Approva il chaincode per l'organizzazione 3
+printSeparator "Approve Chaincode for Org3"
+peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer0.modbus2chain.com --channelID modbus2chainchannel --name cciotdata --version 1.1 --init-required --sequence 1 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA --package-id $PACKAGE_ID --waitForEvent --signature-policy "OR ('Org1MSP.peer','Org2MSP.peer','Org3MSP.peer')"
+
 printSeparator "Done!"
