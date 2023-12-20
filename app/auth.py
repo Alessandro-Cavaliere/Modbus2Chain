@@ -2,6 +2,9 @@ from flask import  request
 import jwt
 import datetime
 import os
+from bson import ObjectId
+import json
+
 
 # Funzione middleware per l'autenticazione dell'app
 def authenticate_token_app(auth_header):
@@ -30,13 +33,18 @@ def authenticate_token(auth_header):
     except jwt.InvalidTokenError:
         return False
 
-# Funzione per generare un token JWT
+def serialize_object_id(obj):
+    if isinstance(obj, ObjectId):
+        return str(obj)  # Converti l'ObjectId in una stringa
+    raise TypeError(f"Object of type {type(obj)} is not JSON serializable")
+
 def generate_jwt_token(user):
-    expiration_time = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)  # Scadenza di 30 minuti
+    expiration_time = datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
     payload = {
         "exp": expiration_time,
-        "user" : user
+        "user": json.loads(json.dumps(user, default=serialize_object_id)),  # Serializza ObjectId
     }
-    token = jwt.encode(payload,os.getenv('JWT_SECRET'), algorithm="HS256")
+    token = jwt.encode(payload, os.getenv('JWT_SECRET'), algorithm="HS256")
     return token
+
 
