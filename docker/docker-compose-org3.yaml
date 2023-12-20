@@ -1,4 +1,4 @@
-version: '3'
+version: '3.8'
 
 volumes:
   peer0.org3.modbus2chain.com:
@@ -24,12 +24,14 @@ services:
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org3.modbus2chain.com:8052
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org3.modbus2chain.com:8052
       - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_VM_ENDPOINT=unix:///var/run/docker.sock
     volumes:
         - ../crypto-material/peerOrganizations/org3.modbus2chain.com/peers/peer0.org3.modbus2chain.com/msp:/etc/hyperledger/fabric/msp
         - ../crypto-material/peerOrganizations/org3.modbus2chain.com/peers/peer0.org3.modbus2chain.com/tls:/etc/hyperledger/fabric/tls
         - peer0.org3.modbus2chain.com:/var/hyperledger/production
+        - /var/run/docker.sock:/var/run/docker.sock
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
-    command: peer node start
+    command: peer node start 
     ports:
       - 8052:8052
       

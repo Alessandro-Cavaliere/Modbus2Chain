@@ -213,7 +213,7 @@ ledger:
 operations:
   listenAddress: 127.0.0.1:9443
   tls:
-    enabled: false
+    enabled: true
     cert:
       file:
     key:

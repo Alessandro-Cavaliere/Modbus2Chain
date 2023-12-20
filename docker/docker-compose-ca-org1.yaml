@@ -1,0 +1,32 @@
+version: "3.8"
+
+volumes:
+  ca-org1.modbus2chain.com:
+
+networks:
+  apnet:
+
+services:
+  ca-org1:
+    container_name: ca-org1.modbus2chain.com
+    image: hyperledger/fabric-ca
+    volumes:
+      - ../crypto-material/peerOrganizations/org1.modbus2chain.com/ca:/etc/hyperledger/fabric-ca-server/ca
+      - ca-org1.modbus2chain.com:/var/hyperledger/fabric-ca-server-config
+      - ../crypto-material/peerOrganizations/org1.modbus2chain.com/peers/peer0.org1.modbus2chain.com/tls:/etc/hyperledger/fabric-ca-server/tls
+      - ../crypto-material/peerOrganizations/org1.modbus2chain.com/peers/peer0.org1.modbus2chain.com/msp:/etc/hyperledger/fabric-ca-server/msp
+    environment:
+      - FABRIC_CA_SERVER_HOME=/etc/hyperledger/fabric-ca-server/ca
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_CA_NAME=ca-org1.modbus2chain.com
+      - FABRIC_CA_SERVER_CSR_CN=ca-org1.modbus2chain.com
+      - FABRIC_CA_SERVER_CSR_HOSTS=0.0.0.0
+      - FABRIC_CA_SERVER_DEBUG=true
+      - FABRIC_CA_CLIENT_HOME=/etc/hyperledger/fabric-ca-server/msp
+      - FABRIC_CA_SERVER_BOOT_NAME=Admin
+      - FABRIC_CA_SERVER_BOOT_PASSWORD=adminpw
+    working_dir: /etc/hyperledger/fabric-ca-server
+    ports:
+      - 7054:7054
+    networks:
+      - apnet

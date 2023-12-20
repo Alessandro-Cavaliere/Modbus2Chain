@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 
 volumes:
   peer0.org1.modbus2chain.com:
@@ -14,8 +14,10 @@ services:
     image: hyperledger/fabric-peer:2.1
     volumes:
       - ../crypto-material/peerOrganizations/org1.modbus2chain.com/peers/peer0.org1.modbus2chain.com/msp:/etc/hyperledger/fabric/msp
+      - ../crypto-material/peerOrganizations/org1.modbus2chain.com/users/Admin@org1.modbus2chain.com/msp:/usr/local/go/src/Modbus2Chain/config/msp
       - ../crypto-material/peerOrganizations/org1.modbus2chain.com/peers/peer0.org1.modbus2chain.com/tls:/etc/hyperledger/fabric/tls
       - peer0.org1.modbus2chain.com:/var/hyperledger/production
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       # Generic peer variables
       - CORE_PEER_TLS_ENABLED=true
@@ -28,8 +30,11 @@ services:
       - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.modbus2chain.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.modbus2chain.com:7051
+      - CORE_PEER_MSPCONFIGPATH=/usr/local/go/src/Modbus2Chain/config/msp
       - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_VM_ENDPOINT=unix:///var/run/docker.sock
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
+    
     ports:
       - 7051:7051

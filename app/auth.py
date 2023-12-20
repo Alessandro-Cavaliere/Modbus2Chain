@@ -12,7 +12,7 @@ def authenticate_token_app(auth_header):
         token = auth_header.split(' ')[1]  # Estrae il token dal formato "Bearer <token>"
         print(token)
         # Verifica il token (implementa la tua logica di verifica qui)
-        if token == os.getenv('SECRET_APP'):
+        if token == os.getenv('JWT_SECRET'):
             return True
     return False
 

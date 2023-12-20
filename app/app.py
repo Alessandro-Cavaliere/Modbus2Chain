@@ -12,7 +12,6 @@ import utils
 load_dotenv()
 app = Flask("Modbus2Chain")
 
-
 # Connessione al database MongoDB
 client = MongoClient(os.getenv("HOST"))
 db = client[os.getenv("DATABASE")]

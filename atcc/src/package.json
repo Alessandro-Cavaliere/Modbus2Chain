@@ -1,0 +1,14 @@
+{
+  "name": "src",
+  "version": "1.0.0",
+  "description": "Modbus2Chain ChainCode for the elaboration of IoT sensors information.",
+  "main": "cc-iotdata.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alessandro-Cavaliere",
+  "license": "ISC",
+  "dependencies": {
+    "fabric-contract-api": "^2.5.4"
+  }
+}
