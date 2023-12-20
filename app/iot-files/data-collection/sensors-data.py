@@ -28,6 +28,7 @@ def read_humidity(pin):
         except Exception as e:
             print("Error reading humidity: {}".format(e))
         time.sleep(2)
+        
 
 # Motion sensor function
 # Use the D2 pin of the ESP8266 connected to the OUT pin of the sensor, then connect the GND of the sensor to the GND of the ESP and the VCC of the sensor to the 3V pin of the ESP.
@@ -50,3 +51,9 @@ def sound_buzzer(pin, duration, frequency):
     buzzer.duty(512)
     time.sleep(duration)
     buzzer.deinit()
+
+
+def get_int():
+    return 102
+
+print("CIAO")
