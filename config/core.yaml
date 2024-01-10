@@ -71,7 +71,7 @@ peer:
     enabled: false
     clientAuthRequired: false
     cert:
-      file: tls/server.crt
+      file: tls/client.crt
     key:
       file: tls/server.key
     rootcert:

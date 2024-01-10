@@ -13,6 +13,9 @@ class SimpleChaincode extends Contract {
         // Qui puoi inserire la logica per inizializzare il tuo ledger
         return stub.getResponse();
     }
+    async Hello() {
+        return "ciaooo"
+    }
 
     async Invoke(stub) {
         const { fcn, params } = stub.getFunctionAndParameters();

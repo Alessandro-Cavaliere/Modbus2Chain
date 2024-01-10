@@ -85,11 +85,11 @@ Organizations:
 # L'*applicazione* , d'altra parte, definisce il set di funzionalità, che è rilevante per tutti i peer E tutti gli ordinatori e quindi definisce il minimo comune denominatore per l'intera rete.
 Capabilities:
     Channel: &ChannelCapabilities
-        V2_0: true
+        V1_4: true
     Orderer: &OrdererCapabilities
-        V2_0: true
+        V1_4: true
     Application: &ApplicationCapabilities
-        V2_0: true
+        V1_4: true
 
 Application: &ApplicationDefaults
     Organizations:

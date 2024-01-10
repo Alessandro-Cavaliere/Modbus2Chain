@@ -36,11 +36,11 @@ peer channel update -o localhost:7050 --ordererTLSHostnameOverride orderer0.modb
 # Pacchetta il chaincode
 printSeparator "Package Chaincode"
 
-peer lifecycle chaincode package cciotdata.tar.gz --path ./atcc/ --lang node --label cciotdata 
+peer chaincode package cciotdata.tar.gz --path ./atcc/ --lang node --label cciotdata 
 
 # Installa il chaincode e ottieni il package-id
 printSeparator "Install Chaincode for Org1"
-peer lifecycle chaincode install cciotdata.tar.gz  --tlsRootCertFiles ./crypto-material/peerOrganizations/org1.modbus2chain.com/tlsca/tlsca.org1.modbus2chain.com-cert.pem
+peer chaincode install cciotdata.tar.gz  --tlsRootCertFiles ./crypto-material/peerOrganizations/org1.modbus2chain.com/tlsca/tlsca.org1.modbus2chain.com-cert.pem
 
 # Ottieni l'elenco dei package installati
 INSTALLED_PACKAGES=$(peer lifecycle chaincode queryinstalled)
@@ -116,5 +116,5 @@ peer channel update -o localhost:7050 --ordererTLSHostnameOverride orderer0.modb
 # Approva il chaincode per l'organizzazione 3
 printSeparator "Approve Chaincode for Org3"
 peer lifecycle chaincode approveformyorg -o localhost:7050 --ordererTLSHostnameOverride orderer0.modbus2chain.com --channelID modbus2chainchannel --name cciotdata --version 1.1 --init-required --sequence 1 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA --package-id $PACKAGE_ID --waitForEvent --signature-policy "OR ('Org1MSP.peer','Org2MSP.peer','Org3MSP.peer')"
-
+'
 printSeparator "Done!"

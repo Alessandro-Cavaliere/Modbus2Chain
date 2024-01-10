@@ -9,7 +9,7 @@ networks:
 services:
   orderer0.modbus2chain.com:
     container_name: orderer0.modbus2chain.com
-    image: hyperledger/fabric-orderer:2.1
+    image: hyperledger/fabric-orderer:1.4
     volumes:
       - ../system-genesis-block/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
       - ../crypto-material/ordererOrganizations/modbus2chain.com/orderers/orderer0.modbus2chain.com/msp:/var/hyperledger/orderer/msp

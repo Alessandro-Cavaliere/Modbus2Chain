@@ -21,7 +21,7 @@ users = db["utenti"]
 # Chiave segreta per la firma del token JWT (dovrebbe essere segreta)
 jwt_secret_key = os.getenv('SECRET_APP')
 
-"""
+
 bbb = paramiko.SSHClient()
 bbb_ip = os.getenv('BBB_IP')
 bbb_username = os.getenv('BBB_SSH_USERNAME')
@@ -31,7 +31,7 @@ bbb_password = os.getenv('BBB_SSH_PASSWORD')
 bbb.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 bbb.connect(bbb_ip, username=bbb_username, password=bbb_password)
 utils.load_files_on_bbb(bbb)
-"""
+
 @app.route('/')
 def home():
     return "Welcome to Modbus2Chain Server"
@@ -77,8 +77,10 @@ def login():
         # Verifica se email e password sono forniti
         if not email or not password:
             return jsonify({"error": "Email and password are required"}), 400
+        print(email,password)
+        user =dao.login_user(db, email,password) 
         
-        user =dao.login_user(db, email,password)
+        
         if user == False:
             return jsonify({"error": "Invalid email or password"}), 401
         # Esegui l'autenticazione con successo e genera il token JWT
@@ -104,14 +106,16 @@ def sendData():
     try:
         # Apply the authenticate_token_app middleware function here
         if not auth.authenticate_token(request.headers.get('Authorization')):
-            return jsonify({"message": "Unauthorized"}), 401
+            return jsonify({"message": "Unauthorized"}), 401 
         
         python_command = 'python3 /var/lib/cloud9/Modbus2Chain-master/master.py'
 
         # Esegui il comando Python
         stdin, stdout, stderr = bbb.exec_command(python_command)
-        print("Comando lanciato!!!!")
+        
+
         print(stdout.read().decode('utf-8'))   
+        print("Comando lanciato!!!!")
 
     except Exception as e:
         # Gestisci eccezioni
@@ -127,4 +131,4 @@ def protected_route():
 
     return jsonify({"message": "Questa è una rotta protetta"}), 200
 
-app.run(host='0.0.0.0',port=5000)  #ip del pc locale
+app.run(host='0.0.0.0',port=5000,debug=True, ssl_context=('web-server/cert.pem', 'web-server/key.pem'))   #ip del pc locale

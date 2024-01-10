@@ -9,7 +9,7 @@ networks:
 services:
   ca-org1:
     container_name: ca-org1.modbus2chain.com
-    image: hyperledger/fabric-ca
+    image: hyperledger/fabric-ca:1.4.0
     volumes:
       - ../crypto-material/peerOrganizations/org1.modbus2chain.com/ca:/etc/hyperledger/fabric-ca-server/ca
       - ca-org1.modbus2chain.com:/var/hyperledger/fabric-ca-server-config

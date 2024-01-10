@@ -11,7 +11,7 @@ services:
     networks:
       - apnet
     container_name: peer0.org1.modbus2chain.com
-    image: hyperledger/fabric-peer:2.1
+    image: hyperledger/fabric-peer:1.4.0
     volumes:
       - ../crypto-material/peerOrganizations/org1.modbus2chain.com/peers/peer0.org1.modbus2chain.com/msp:/etc/hyperledger/fabric/msp
       - ../crypto-material/peerOrganizations/org1.modbus2chain.com/users/Admin@org1.modbus2chain.com/msp:/usr/local/go/src/Modbus2Chain/config/msp
