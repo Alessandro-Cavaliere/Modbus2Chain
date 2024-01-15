@@ -17,7 +17,7 @@ the client can be defined by the user.
 import time
 import urequests as requests
 from package.umodbus import tcp
-from sensors_data import get_int,get_int2
+from sensors_data import read_humidity_once,read_temperature_once,detect_motion
 
 IS_DOCKER_MICROPYTHON = False
 try:
@@ -96,12 +96,20 @@ def ping(host, port=80, timeout=1000):
 # CALLBACK FUNCTIONS FOR COIL
 
 def my_coil_set_cb(reg_type, address, val):
-    print('Custom callback, called on setting {} at {} to: {}'.
-          format(reg_type, address, val))
+    print("Sto settando il registro MOVEMENT_HANDLE COILS {} dopo la chiamata write del Master con il valore [{}]". format(address,val))
+    movement_coils_val = register_definitions["COILS"]["MOVEMENT_HANDLE"]['val']
+    
+    print("Settaggio MOVEMENT_HANDLE COILS for MOVEMENT with {}". format(movement_coils_val))
+    client.set_hreg(address=42, value=movement_coils_val)  #Setting of MOVEMENT_HANDLE for MOVEMENT
+    
 
 def my_coil_get_cb(reg_type, address, val):
-    print('Custom callback, called on getting {} at {}, currently: {}'.
-          format(reg_type, address, val))
+    print("Sto restituendo il registro MOVEMENT_HANDLE COILS {} dopo la chiamata get del Master. CURRENTLY: {}". format(address,val))
+
+    print("Rilevamento movimenti dal sensore...")
+    mov=detect_motion(1)
+    print("Movimento rilevato? -> {}". format(mov))
+    client.set_hreg(address=42, value=mov)
 
 # ===============================================
 
@@ -114,24 +122,14 @@ def my_holding_register_set_temperature(reg_type, address, val):
     temperature_hreg_val = register_definitions["HREGS"]["TEMPERATURE_HREG"]['val']
     
     print("Settaggio TEMP HREG for TEMPERATURE with {}". format(temperature_hreg_val))
-    def make_get_request(url):
-        response = requests.get(url)
-        print("Status Code:", response.status_code)
-        print("Response Body:", response.text)
-        response.close()
-
-    url = 'http://192.168.128.174:5000/'
-    make_get_request(url)
-    #client.set_hreg(address=93, value=temperature_hreg_val)  #Setting of TEMP_HREG for temperature
+    client.set_hreg(address=93, value=temperature_hreg_val)  #Setting of TEMP_HREG for temperature
     
 def my_holding_register_get_temperature(reg_type, address, val):
     print("Sto restituendo il registro TEMPERATURE HREGS {} dopo la chiamata get del Master. CURRENTLY: {}". format(address,val))
-    
-    # Implement data decompression and decryption here
-    # Before returning data to the master, decode and decompress the data as expected.
+
     print("Prelevo i dati dal sensore...")
-    x=get_int()
-    print("Temperatura restituita: {}". format(x))
+    x=read_temperature_once(0)
+    print("Temperatura restituita: {}°C". format(x))
     client.set_hreg(address=96, value=x)
 
 # ===============================================
@@ -145,15 +143,15 @@ def my_holding_register_set_humidity(reg_type, address, val):
     humidity_hreg_val = register_definitions["HREGS"]["HUMIDITY_HREG"]['val']
     
     print("Settaggio TEMP HREG for HUMIDITY with {}". format(humidity_hreg_val))
-    #client.set_hreg(address=94, value=humidity_hreg_val)  #Setting of TEMP_HREG for humidity
+    client.set_hreg(address=94, value=humidity_hreg_val)  #Setting of TEMP_HREG for humidity
 
 
 def my_holding_register_get_humidity(reg_type, address, val):
     print("Sto restituendo il registro HUMIDITY HREGS {} dopo la chiamata get del Master. CURRENTLY: {}". format(address,val))
     
     print("Prelevo i dati dal sensore...")
-    x=get_int2()
-    print("Temperatura restituita: {}". format(x))
+    x=read_humidity_once(0)
+    print("Temperatura restituita: {} °C". format(x))
     client.set_hreg(address=95, value=x)
 
 # ===============================================
@@ -221,12 +219,12 @@ def my_holding_register_set_temp_register(reg_type, address, val):
 register_definitions = {
     "COILS": {
         "MOVEMENT_HANDLE": {
-            "register": 42,
+            "register": 91,
             "len": 1,
             "val": 0
         },
         "RESPONSE_TEST": {
-            "register": 123,
+            "register": 122,
             "len": 1,
             "val": 1
         }
@@ -248,7 +246,7 @@ register_definitions = {
             "val": 0  # Initial value of humidity
         },
         "PRESSURE_HREG": {
-            "register": 91,
+            "register": 92,
             "len": 1,
             "val": 0  # Initial value of pressure
         },
@@ -281,6 +279,10 @@ if IS_DOCKER_MICROPYTHON:
         
 # ===============================================
 # add callbacks for different Modbus functions
+
+#MOVEMENT COILS CALLBACKS
+register_definitions['COILS']['MOVEMENT_HANDLE']['on_set_cb'] = my_coil_set_cb
+register_definitions['COILS']['MOVEMENT_HANDLE']['on_get_cb'] = my_coil_get_cb
 
 #TEMPERATURE CALLBACKS
 register_definitions['HREGS']['TEMPERATURE_HREG']['on_set_cb'] = my_holding_register_set_temperature

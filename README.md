@@ -1,58 +1,48 @@
-# Blockchain & Back-End Application
+# Modbus2Chain
+<picture>
+  <source srcset="./app/assets/LogoProgetto.png" media="(min-width: 680px)">
+  <img src="./app/assets/LogoProgetto.png" alt="Logo Progetto">
+</picture>
 
-The project consists of a back-end based on Hyperledger Fabric, an enterprise blockchain platform, and middleware written in Python. The goal of the project is to provide a secure and reliable infrastructure for managing environmental data collected from IoT devices using the Modbus RTU protocol.
+Table of contens
+=============
 
-The middleware in Python is used to convert Modbus data into formats readable by the Hyperledger Fabric blockchain, thus enabling secure and reliable recording and management of environmental data.
+* [Description](#description)
+* [Installation](#installation)
+  * [Back_End_Application](#back_end_application)
+  * [Blockchain_Application](#blockchain_application)
+  * [React_Application](#react_application)
 
-The IoT device communication framework is written in Python and is part of the back-end. The project can be used in different contexts, such as for real-time environmental data management, supply chain tracking, or smart contract management. Due to its modularity and flexibility, the project can be easily adapted to the specific needs of different organizations.
+Description
+--------
 
-In summary, the project provides a robust and secure infrastructure for managing environmental data taken from IoT devices using the Modbus RTU protocol, based on Hyperledger Fabric and middleware in Python.
+**Modbus2Chain** is an IoT project that uses the Modbus protocol to acquire environmental data from sensors and send it securely to the blockchain via an `RS-485` serial connection. This choice was made because `RS-485` is a long distance serial protocol that allows reliable communication between devices in noisy industrial environments.
 
-## 📚 Pre-requisite
-The following is the list of requirements for the application to function properly
-
- -  *Unix/Linux system or shell bash (using WSL, Git Bash etc...)*
- -  *Python 3.x*
- -  *Docker >=17.06.2*
- -  *Docker Compose >=1.14.0*
- -  *Binaries of Hyperledger Fabric (provided in the repository)*
-
-
-## 🛠️ Installation
-
-Install all dependencies with ***pip***:
-
-```pip
-    pip install -r .\requirements.txt            
-```
-To create a private blockchain network using Hyperledger Fabric, use this script:
+To achieve the goal of creating an efficient system for collecting and sharing critical environmental data, the project uses a number of technologies:
  
-```bash
-    bash start.sh          
-```
-Specifically, this command performs these operations:
-- Definition of environment variables for Hyperledger Fabric binaries and blockchain network configuration;
- - Generation of cryptographic material for the organizations involved;
- - Creating blockchain network genesis block using the `modbus2chainNetworkProfile` configuration profile by saving it in the system-genesis-block directory;
- - Starting Docker Containers using `docker-compose.yaml`;
- - Creating the transaction for creating the communication channel `modbus2chainchannel` using the configuration profile `modbus2chainChannelProfile` saving it in the directory `channel-artifacts`;
- - Creation of anchor peer updates for organizations;
- - Adding the involved organizations to the communication channel;
- - Update anchors peer for the involved organizations.
+ - The Modbus protocol back-end and device management is implemented in `Python`, using the `PyModbus` library for communication with sensors.
+ - The blockchain that is used is `Hyperledger Fabric`, a framework for creating highly scalable and modular enterprise blockchains. Hyperledger Fabric provides a secure and reliable platform for logging and sharing critical data, enabling easy permission management and enhanced data privacy.
+ - The user interface is developed in `React`, a JavaScript framework for creating responsive and dynamic user interfaces. 
 
-To eventually delete all files and configurations associated with the Hyperledger Fabric blockchain network, run the following script:
-```bash
-    bash stop.sh          
-```
+The system workflow begins with the collection of environmental data from sensors using the Modbus protocol over `RS-485`. The acquired data is then sent to the Python back-end, which processes it and sends it to the `Hyperledger Fabric` blockchain using the APIs made available by the framework. The blockchain guarantees the integrity and immutability of data, which can be easily shared with other authorized users.
 
-## 🚀 Usage
->To launch and run this application assumes proper configuration and setting of the IoT device architecture and middleware. 
+⬇️Below, a graphic diagram of the workflow in order to make it easier to understand and interact between the different components of the system⬇️.
 
-To launch the application:
-```python
-    cd app
-    python app.py          
-```
+<picture>
+  <source srcset="./app/assets/ArchitectureDiagram.jpg" media="(min-width: 680px)">
+  <img src="./app/assets/ArchitectureDiagram.jpg" alt="ArchitectureDiagram">
+</picture>
 
 
-    
+Thanks to **Modbus2Chain**, it is possible to create an efficient system for collecting and sharing critical environmental data, guaranteeing their security and integrity through the `Hyperledger Fabric` blockchain. Furthermore, thanks to the use of modern technologies such as `React` and `Python`, the project is highly flexible and easily scalable to meet the needs of any IoT application.
+
+Installation
+--------
+Insert general installation part
+### Back_End_Application
+For detailed instructions on setting up and using the Back-End of this application, please refer to the [Back-End README](./README_BE.md).
+### Blockchain_Application
+Insert blockchain installation part
+### React_Application
+Insert React installation part
+
