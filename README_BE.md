@@ -1,12 +1,12 @@
 # Blockchain & Back-End Application
 
-The project consists of a back-end based on Hyperledger Fabric, an enterprise blockchain platform, and middleware written in Python. The goal of the project is to provide a secure and reliable infrastructure for managing environmental data collected from IoT devices using the Modbus RTU protocol.
+The project consists of a back-end based on Hyperledger Fabric, an enterprise blockchain platform, and middleware written in Python. The goal of the project is to provide a secure and reliable infrastructure for managing environmental data collected from IoT devices using the Modbus TCP protocol.
 
 The middleware in Python is used to convert Modbus data into formats readable by the Hyperledger Fabric blockchain, thus enabling secure and reliable recording and management of environmental data.
 
-The IoT device communication framework is written in Python and is part of the back-end. The project can be used in different contexts, such as for real-time environmental data management, supply chain tracking, or smart contract management. Due to its modularity and flexibility, the project can be easily adapted to the specific needs of different organizations.
+The IoT device communication framework is written in Python and is part of the back-end. The project can be used in different contexts, such as for real-time environmental data management, tracking, or smart contract management. Due to its modularity and flexibility, the project can be easily adapted to the specific needs of different organizations.
 
-In summary, the project provides a robust and secure infrastructure for managing environmental data taken from IoT devices using the Modbus RTU protocol, based on Hyperledger Fabric and middleware in Python.
+In summary, the project provides a robust and secure infrastructure for managing environmental data taken from IoT devices using the Modbus TCP protocol, based on Hyperledger Fabric and middleware in Python.
 
 ## 📚 Pre-requisite
 The following is the list of requirements for the application to function properly
@@ -15,7 +15,7 @@ The following is the list of requirements for the application to function proper
  -  *Python 3.x*
  -  *Docker >=17.06.2*
  -  *Docker Compose >=1.14.0*
- -  *Binaries of Hyperledger Fabric (provided in the repository)*
+ -  *Binaries of Hyperledger Fabric v.1.4.0 due to Hyperledger Fabric SDK requirement(provided in the repository)*
 
 
 ## 🛠️ Installation
@@ -52,6 +52,11 @@ To launch the application:
 ```python
     cd app
     python app.py          
+```
+or, if you want to use in dev-mode run from the root of the project:
+
+```python
+    python app/app.py          
 ```
 
 
