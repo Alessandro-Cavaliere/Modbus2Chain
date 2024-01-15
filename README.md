@@ -16,15 +16,15 @@ Table of contens
 Description
 --------
 
-**Modbus2Chain** is an IoT project that uses the Modbus protocol to acquire environmental data from sensors and send it securely to the blockchain via an `RS-485` serial connection. This choice was made because `RS-485` is a long distance serial protocol that allows reliable communication between devices in noisy industrial environments.
+**Modbus2Chain** is an IoT project that uses the Modbus protocol to acquire environmental data from sensors and send it securely to the blockchain via a `TCP` connection. This choice was made because `Modbus TCP` is very popular for implementing IoT communications in industrial environments, due to its wide adoption, compatibility with Ethernet networks, adequate security and real-time communication capabilities
 
 To achieve the goal of creating an efficient system for collecting and sharing critical environmental data, the project uses a number of technologies:
  
- - The Modbus protocol back-end and device management is implemented in `Python`, using the `PyModbus` library for communication with sensors.
+ - The Modbus protocol back-end and device management is implemented in `Python`, using the `micropython-modbus` library for communication with sensors.
  - The blockchain that is used is `Hyperledger Fabric`, a framework for creating highly scalable and modular enterprise blockchains. Hyperledger Fabric provides a secure and reliable platform for logging and sharing critical data, enabling easy permission management and enhanced data privacy.
  - The user interface is developed in `React`, a JavaScript framework for creating responsive and dynamic user interfaces. 
 
-The system workflow begins with the collection of environmental data from sensors using the Modbus protocol over `RS-485`. The acquired data is then sent to the Python back-end, which processes it and sends it to the `Hyperledger Fabric` blockchain using the APIs made available by the framework. The blockchain guarantees the integrity and immutability of data, which can be easily shared with other authorized users.
+The system workflow begins with the collection of environmental data from sensors using the Modbus TCP protocol. The acquired data is then sent to the Python back-end, which processes it and sends it to the `Hyperledger Fabric` blockchain using the APIs made available by the framework. The blockchain guarantees the integrity and immutability of data, which can be easily shared with other authorized users.
 
 ⬇️Below, a graphic diagram of the workflow in order to make it easier to understand and interact between the different components of the system⬇️.
 
