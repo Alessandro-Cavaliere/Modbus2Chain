@@ -38,11 +38,10 @@ Thanks to **Modbus2Chain**, it is possible to create an efficient system for col
 
 Installation
 --------
-Insert general installation part
-### Back_End_Application
-For detailed instructions on setting up and using the Back-End of this application, please refer to the [Back-End README](./README_BE.md).
-### Blockchain_Application
-Insert blockchain installation part
+For the correct functioning of the application, READMEs are linked below to the respective sections. Read all the READMEs carefully to avoid making configuration errors.
+
+### Back_End_And_Blockchain_Application
+For detailed instructions on setting up and using the Back-End and the Blockchain network of this application, please refer to the [Back-End & Blockchain README](./README_BE_BC.md).
 ### React_Application
-Insert React installation part
+For detailed instructions on setting up and using the Front-End of this application, please refer to the [Front-End README](https://github.com/Alessandro-Cavaliere/Modbus2Chain/blob/MC_FE/README.md).
 
