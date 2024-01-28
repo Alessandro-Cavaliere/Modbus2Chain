@@ -9,8 +9,7 @@ Table of contens
 
 * [Description](#description)
 * [Installation](#installation)
-  * [Back_End_Application](#back_end_application)
-  * [Blockchain_Application](#blockchain_application)
+  * [Back_End_And_Blockchain_Application](#back_end_and_blockchain_application)
   * [React_Application](#react_application)
 
 Description
