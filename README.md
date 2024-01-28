@@ -29,7 +29,7 @@ The system workflow begins with the collection of environmental data from sensor
 
 <picture>
   <source srcset="./app/assets/ArchitectureDiagram.jpg" media="(min-width: 680px)">
-  <img src="./app/assets/ArchitectureDiagram.jpg" alt="ArchitectureDiagram">
+  <img src="./app/assets/ArchitectureDiagram.png" alt="ArchitectureDiagram">
 </picture>
 
 
