@@ -9,8 +9,10 @@ Table of contens
 
 * [Description](#description)
 * [Installation](#installation)
+* [IoT_Architecture](#iot_architecture)
   * [Back_End_And_Blockchain_Application](#back_end_and_blockchain_application)
   * [React_Application](#react_application)
+
 
 Description
 --------
@@ -34,6 +36,26 @@ The system workflow begins with the collection of environmental data from sensor
 
 
 Thanks to **Modbus2Chain**, it is possible to create an efficient system for collecting and sharing critical environmental data, guaranteeing their security and integrity through the `Hyperledger Fabric` blockchain. Furthermore, thanks to the use of modern technologies such as `React` and `Python`, the project is highly flexible and easily scalable to meet the needs of any IoT application.
+
+IoT_Architecture
+--------
+Being an exam project, for pure study purposes, very simple and easily configurable **IoT devices** were used, connected to each other on a breadboard.
+
+The IoT devices are also connected to a `slave` device (MCU) (in our case a `Raspberry Pi Pico W`), which allows us to manage the `Modbus TCP` requests arriving from our master (a `BeagleBone Black`) and save the data on Modbus registers (`HREGS` Holding Registers and `COILS` registers were used in our project).
+For more details on Modbus registers you can consult this simple guide: [Modbus_Registers](https://csimn.com/MHelp-VP3-TM/vp3-tm-appendix-C.html#:~:text=Modbus%20Register%20Types&text=Coils%20are%201%2Dbit%20registers,and%20may%20only%20be%20read.)
+
+⬇️Below is a photo of the connections made⬇️.
+<picture>
+  <source srcset="./app/assets/IoTArchitecture.jpeg" media="(min-width: 680px)">
+  <img src="./app/assets/IoTArchitecture.jpeg" alt="IoTArchitecture">
+</picture>
+
+If the temperature exceeds a certain threshold, the buzzer (`Crowtail Buzzer 2.0`) sounds intermittently for a certain period, lighting up the red LED simulating an alarm.
+If movement is detected through the sensor (`HC-SR501 PIR`), the yellow LED lights up and it is possible, through other configurations present, to ensure that at the moment of a detection, the buzzer sounds, simulating another type of alarm, based on the movement, in fact.
+
+The temperature and humidity sensor (`DHT11`), however, is always active, continuously monitoring temperature and humidity, whose values are saved in the registers (or notarized if the user chooses to do so, on the blockchain).
+
+Temperature and humidity data are assumed as **hypothetical critical data** to be made immutable on the blockchain and to be monitored continuously.
 
 Installation
 --------
