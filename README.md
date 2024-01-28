@@ -12,6 +12,9 @@ Table of contens
 * [IoT_Architecture](#iot_architecture)
   * [Back_End_And_Blockchain_Application](#back_end_and_blockchain_application)
   * [React_Application](#react_application)
+* [Presentation](#presentation)
+* [Conclusions](#conclusions)
+* [Sources](#sources)
 
 
 Description
@@ -65,4 +68,40 @@ For the correct functioning of the application, READMEs are linked below to the 
 For detailed instructions on setting up and using the Back-End and the Blockchain network of this application, please refer to the [Back-End & Blockchain README](./README_BE_BC.md).
 ### React_Application
 For detailed instructions on setting up and using the Front-End of this application, please refer to the [Front-End README](https://github.com/Alessandro-Cavaliere/Modbus2Chain/blob/MC_FE/README.md).
+
+Presentation
+--------
+
+For this project, a summary `presentation` was also created of what this project is about, what technologies were used, the security criteria and more.
+
+To view the presentation pdf (in Italian) download it directly from here ➡️ [Presentation](./Modbus2chain_Presentation.pdf)
+
+Conclusions
+--------
+
+As already mentioned, this project was developed purely for study purposes for the exams of the IoT Security and Data Security course. The following project does not have a real application function in corporate or industrial contexts, the study which was carried out and demonstrated aims to develop software that combines two very important technologies (blockchain and IoT) and uses cutting-edge security criteria for the security of a hypothetical application that handles sensitive data and critical information.
+
+Furthermore, a new communication for us (Modbus) was tested, which allowed us to understand its mechanisms and critical issues. We decided to use Modbus because it is the standard for industrial communication protocols, mainly used in industrial automation to connect programmable logic controllers (PLCs).
+
+Sources
+--------
+- [Modbus Definition](https://en.wikipedia.org/wiki/Modbus)
+- [Modbus Registers - 1](https://csimn.com/MHelp-VP3-TM/vp3-tm-appendix-C.html)
+- [Modbus Registers - 2](https://www.fernhillsoftware.com/help/drivers/modbus/modbus-protocol.html)
+- [Modbus TCP Overview](https://www.rtautomation.com/technologies/modbus-tcpip/)
+- [MicroPython Overview](https://micropython.org/)
+- [MicroPython Modbus Library](https://github.com/brainelectronics/micropython-modbus)
+- [Beaglebone Black Docs](https://docs.beagleboard.org/latest/index.html)
+- [Raspberry Pi Pico Docs](https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html)
+- [Hyperledger Fabric Docs](https://hyperledger-fabric.readthedocs.io/en/latest/)
+- [Hyperledger Fabric SDK - Python](https://github.com/hyperledger/fabric-sdk-py)
+- [Fabric SDK Python Wiki](https://wiki.hyperledger.org/display/fabric/Hyperledger+Fabric+SDK+Py)
+- [Fabric SDK Python Docs](https://fabric-sdk-py.readthedocs.io/en/latest/index.html)
+- [Go Installation for Chaincode](https://go.dev/doc/install)
+- [Docker Overview](https://www.docker.com/get-started/)
+- [Installation of Docker Images for Hyperledger](https://hyperledger-fabric.readthedocs.io/en/release-2.2/install.html#)
+- [OpenSSL Download](https://www.openssl.org/source/)
+- [Flask User Guide](https://flask.palletsprojects.com/en/3.0.x/)
+- [React User Guide](https://react.dev/learn)
+
 
